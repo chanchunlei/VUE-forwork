@@ -1,92 +1,62 @@
 <template>
   <div class="big_box">
     <div class="handle-box">
-      <el-select v-model="select_cate" placeholder="筛选门店" class="handle-select mr10">
-        <el-option key="1" label="百脑汇" value="百脑汇"></el-option>
-        <el-option key="2" label="乐之" value="乐之"></el-option>
+      <span class="titleSelected">表头标签：</span>
+      <el-select class="tagSelect" @change="syllable" v-model="value" multiple placeholder="请选择要展示的标签">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
       </el-select>
-      <el-input v-model="select_word" placeholder="筛选关键词" class="handle-input mr10"></el-input>
-      <el-button type="primary" icon="search">搜索</el-button>
     </div>
     <el-table class="box"
-              :data="tableData"
+              :data="list"
               border
               style="width: 100%">
       <el-table-column
         fixed
-        prop="id"
-        label="会员卡号"
+        prop="cid"
+        label="人群ID"
         width="130">
       </el-table-column>
       <el-table-column
-        prop="level"
-        label="会员级别"
-        width="110">
+        v-for="item in optionList"
+        width="150"
+        :prop="item.value"
+        :key="item.value"
+        :label="item.label">
       </el-table-column>
-      <el-table-column
-        prop="transaction"
-        label="交易是否"
-        width="110">
-      </el-table-column>
-      <el-table-column
-        prop="tag"
-        label="标签"
-        width="280">
-        <template slot-scope="scope">
-          <el-tag class="tag_cell" v-for="item in scope.row.tag" :key="item">{{item}}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column
-        prop="money"
-        label="交易累计金额"
-        width="130">
-      </el-table-column>
-      <el-table-column
-        prop="num"
-        label="交易笔数"
-        width="110">
-      </el-table-column>
-      <el-table-column
-        prop="mean"
-        label="平均交易金额"
-        width="110">
-      </el-table-column>
-      <el-table-column
-        prop="time"
-        label="最近交易时间"
-        width="120">
-      </el-table-column>
+
       <el-table-column
         fixed="right"
-        width="250"
+        width="200"
         label="操作">
         <template slot-scope="scope">
           <el-button
-            size="mini"
-            type="primary"
-            @click="handleRecord(scope.$index, scope.row)">记录</el-button>
-          <el-button
-            size="mini"
-            type="primary"
-            @click="handleDetails(scope.$index, scope.row)">详情</el-button>
-          <el-button
-            size="mini"
+            size="small"
             type="primary"
             @click="handleCoupon(scope.$index, scope.row)">送券</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <div>
+    <div class="pages">
       <el-pagination
         background
-        layout="prev, pager, next"
-        :total="1000">
+        layout="sizes,prev, pager, next, jumper"
+        :page-sizes="[20, 50, 100, 200]"
+        :page-size="limit"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :total="total">
       </el-pagination>
     </div>
   </div>
 </template>
 
 <script>
+  import api from '../../api/api'
   export default {
     methods: {
       handleClick(row) {
@@ -97,66 +67,105 @@
       return {
         select_cate: '',
         select_word: '',
-        tableData: [{
-          id: '1801',
-          level: '高级会员',
-          transaction: '是',
-          tag: ['文艺范','女性','20~30岁','回头客'],
-          money: 5000,
-          num: 1,
-          mean: 5000,
-          time: '2018-05-12'
+        page: 1,//当前页
+        limit: 20,//每页显示条数
+        total: 0,
+        tableData: [],//默认表格数据
+        list: [],//表格数据渲染
+        options: [{//默认显示字段
+          value: 'birthday',
+          label: '生日'
         }, {
-          id: '1802',
-          level: '高级会员',
-          transaction: '是',
-          tag: ['壕无人性'],
-          money: 8000,
-          num: 2,
-          mean: 4000,
-          time: '2018-05-12'
+          value: 'bu_name',
+          label: '所属公众号'
         }, {
-          id: '1803',
-          level: '普通会员',
-          transaction: '是',
-          tag: ['小清新'],
-          money: 38,
-          num: 1,
-          mean: 38,
-          time: '2018-05-12'
+          value: 'mobile',
+          label: '会员手机号'
         }, {
-          id: '1804',
-          level: '普通会员',
-          transaction: '否',
-          tag: ['未知'],
-          money: 0,
-          num: 0,
-          mean: 0,
-          time: 'null'
-        },
-          {
-            id: '1805',
-            level: '超级会员',
-            transaction: '是',
-            tag: ['佛系'],
-            money: 888,
-            num: 5,
-            mean: 177.6,
-            time: '2018-05-16'
-          }]
+          value: 'province',
+          label: '号码归属地'
+        }, {
+          value: 'reg_time',
+          label: '注册时间'
+        },{
+          value: 'sex',
+          label: '性别'
+        },{
+          value: 'strBncCode',
+          label: '商益号'
+        },{
+          value: 'vip_level',
+          label: '会员等级'
+        }],
+        optionList:[],//选择显示字段
+        value: [],//已选字段
       }
     },
+    created(){
+      this.optionList = this.options;//最开始所有数据都显示
+      this.fetchData(this.limit,this.page);
+    },
     methods: {
-      handleRecord(index, row) {
-        console.log(index, row);
-        this.$router.push('record');
+      fetchData(limit,page){//数据请求
+        api.GroupMemberList({
+          query:{
+            cid: this.$route.params.cid,
+            limit: limit,
+            page: page
+          },
+          success:res=>{
+            if(res.status == 200){
+              this.total = res.data.count;
+              this.tableData = res.data.data;
+              this.list = res.data.data;
+              this.tableData.forEach((item)=>{
+                if(item.sex == 1){ item.sex = "男";}else if(item.sex == 2){ item.sex = "女";}
+                if(item.vip_level == 1){ item.vip_level = "一般会员";}else if(item.vip_level == 2){ item.vip_level = "vip会员";}
+              })
+            }
+          }
+        })
       },
-      handleDetails(index, row) {
-        console.log(index, row);
-        this.$router.push('details');
+      handleSizeChange(val){//每页多少条
+        this.limit = val;
       },
-      handleCoupon(index, row){
+      handleCurrentChange(val){//当前页
+        this.page = val;
+      },
+      syllable(val){//选定要显示的字段
+        let selected = [];
+        let optionsArr = [];
+        this.tableData.forEach((child,index)=>{
+          selected[index] = {};
+          selected[index].cid = child.cid;
+          for(let key in child){
+            val.forEach(father=>{
+              if(father == key){
+                selected[index][key] = child[key];
+              }
+            })
+          }
+        })
+        val.forEach(father=>{
+          this.options.forEach((item)=>{
+            if(father == item.value){
+              optionsArr.push(item);
+            }
+          })
+        })
+        this.list = selected;
+        this.optionList = optionsArr;
+      },
+      handleCoupon(index, row){//操作
         console.log(index, row);
+      }
+    },
+    watch:{
+      limit(val){
+        this.fetchData(val,this.page);
+      },
+      page(val){
+        this.fetchData(this.limit,val);
       }
     }
   }
@@ -166,27 +175,20 @@
   .big_box{
     background-color: #fff;
   }
+  .titleSelected{
+    font-size: 16px;
+    color: #333;
+    font-weight: 700;
+  }
   .handle-box {
     padding-top: 20px;
     margin-bottom: 20px;
   }
-
-  .handle-select {
-    width: 120px;
+  .tagSelect{
+    width: 40%;
   }
 
-  .handle-input {
-    width: 300px;
-    display: inline-block;
-  }
-  .del-dialog-cnt{
-    font-size: 16px;
-    text-align: center
-  }
-  .tags>.cell{
-    background-color: red;
-  }
-  .tag_cell{
-    margin: 5px;
+  .pages{
+    padding: 15px 0;
   }
 </style>

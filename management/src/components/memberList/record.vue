@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!--会员交易信息  (暂时不用)-->
     <el-table
       :data="tableData6"
       :span-method="objectSpanMethod"

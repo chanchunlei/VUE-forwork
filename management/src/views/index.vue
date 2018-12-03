@@ -5,9 +5,7 @@
      <div class="content-box" :class="{'content-collapse':collapse}">
          <v-Tag></v-Tag>
          <transition name="move" mode="out-in">
-             <keep-alive>
-                 <router-view></router-view>
-             </keep-alive>
+           <router-view></router-view>
          </transition>
      </div>
   </div>
@@ -17,7 +15,7 @@
     import vHead from '../components/top.vue'
     import vMenu from '../components/menu.vue'
     import vTag from '../components/tags.vue'
-    import bus from '../components/bus.js'
+    import { mapState } from 'vuex'
     export default {
         name: "index",
         data(){
@@ -30,11 +28,15 @@
           "v-Menu": vMenu,
           "v-Tag": vTag
         },
-      created(){
-          bus.$on('collapse',msg => {
-            this.collapse = msg
-          })
-        }
+      computed: mapState({//侧边是否合上
+          menu:state => state.menu
+      }),
+      watch:{
+        menu(val){
+            this.collapse = val;
+            //console.log(val);
+          }
+      }
     }
 </script>
 

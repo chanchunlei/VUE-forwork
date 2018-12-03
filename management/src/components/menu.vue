@@ -1,46 +1,55 @@
 <template>
    <div id="menus">
-     <div class="retract">
-        <i @click="collapseChange" class="el-icon-menu"></i>
+     <div @click="collapseChange" class="retract">
+        <i class="el-icon-more"></i>
      </div>
-     <el-menu :collapse="collapse" class="el-menu-vertical-demo">
+     <!--默认导航-->
+     <el-menu class="el-menu-vertical-demo" :collapse="this.$store.state.menu" v-if="showName=='default'? true:false">
        <!--1-->
-       <el-submenu index="1">
-         <template slot="title">
-           <i class="iconfont icon-huiyuan"></i>
-           <span slot="title">会员管理</span>
-         </template>
-         <el-menu-item-group>
-           <el-menu-item index="1-1"><router-link :to="'/member'">会员列表</router-link></el-menu-item>
-         </el-menu-item-group>
-         <el-submenu index="1-3">
-           <span slot="title">会员人群管理</span>
-           <el-menu-item index="1-3-1"><router-link :to="'/grouplist'">人群列表</router-link></el-menu-item>
-           <el-menu-item index="1-3-2"><router-link :to="'/groupAdd'">人群新增</router-link></el-menu-item>
-           <el-menu-item index="1-3-3">人群规则新增</el-menu-item>
-         </el-submenu>
-       </el-submenu>
+       <el-menu-item index="1">
+         <router-link to="/default" active-class>
+           <i class="el-icon-menu"></i>
+           <span>首页</span>
+         </router-link>
+       </el-menu-item>
        <!--2-->
        <el-submenu index="2">
          <template slot="title">
-           <i class="iconfont icon-xingweifenxi"></i>
-           <span slot="title">会员数据分析</span>
+           <i class="iconfont icon-huiyuan"></i>
+           <span slot="title">会员数据</span>
          </template>
          <el-menu-item-group>
-           <el-menu-item index="2-1"><router-link :to="'/baseCharts'">会员规模分析</router-link></el-menu-item>
-           <el-menu-item index="2-2">会员贡献度</el-menu-item>
-           <el-menu-item index="2-3">会员行为偏好</el-menu-item>
+           <el-menu-item index="2-1"><router-link to="/default/member" active-class>会员规模</router-link></el-menu-item>
+         </el-menu-item-group>
+         <el-menu-item-group>
+           <el-menu-item index="2-2"><router-link to="/default/contribution" active-class>会员贡献</router-link></el-menu-item>
+         </el-menu-item-group>
+         <el-menu-item-group>
+           <el-menu-item index="2-3"><router-link to="/default/memberList" active-class>会员列表</router-link></el-menu-item>
          </el-menu-item-group>
        </el-submenu>
-       <!--3-->
+       <!--2-->
        <el-submenu index="3">
          <template slot="title">
-           <i class="iconfont icon-wodejihua"></i>
-           <span slot="title">运维计划</span>
+           <i class="iconfont icon-xingweifenxi"></i>
+           <span slot="title">会员群管理</span>
          </template>
          <el-menu-item-group>
-           <el-menu-item index="3-1">信息关怀</el-menu-item>
-           <el-menu-item index="3-2">推荐信息</el-menu-item>
+           <el-menu-item index="3-1"><router-link to="/default/grouplist" active-class>人群列表</router-link></el-menu-item>
+           <el-menu-item index="3-2"><router-link to="/default/groupAdd" active-class>人群新增</router-link></el-menu-item>
+         </el-menu-item-group>
+       </el-submenu>
+     </el-menu>
+     <!--设置导航-->
+     <el-menu class="el-menu-vertical-demo" :collapse="this.$store.state.menu" v-if="showName=='set'? true:false">
+       <el-submenu index="1">
+         <template slot="title">
+           <i class="el-icon-setting"></i>
+           <span slot="title">管理员管理</span>
+         </template>
+         <el-menu-item-group>
+           <el-menu-item index="1-1"><router-link to="/set" active-class>管理员列表</router-link></el-menu-item>
+           <el-menu-item index="1-2"><router-link to="/set/roleList" active-class>角色管理</router-link></el-menu-item>
          </el-menu-item-group>
        </el-submenu>
      </el-menu>
@@ -48,19 +57,33 @@
 </template>
 
 <script>
-  import bus from '../components/bus.js'
+  import { mapGetters } from 'vuex'
     export default {
         name: "menus",
       data() {
           return{
-            collapse: false
+            showName: 'default'
           }
       },
       methods:{
-        collapseChange(){
-          this.collapse = !this.collapse;
-          bus.$emit('collapse',this.collapse);
-        }
+        collapseChange(){//伸缩menu
+          this.$store.commit('MENU');
+        },
+      },
+      created(){
+        this.showName = this.changeName;
+      },
+      computed:{
+        ...mapGetters([
+          'changeName',
+        ])
+      },
+      watch:{
+        $route(newRoute,oldRoute){},//监听路由导航默认选中
+        changeName(val){//判断是否切换NAV
+          this.showName = val;
+          //console.log(this.$route.path)
+        },
       }
     }
 </script>
@@ -89,5 +112,19 @@
    .el-menu-vertical-demo:not(.el-menu--collapse){
      text-align: left;
      width: 250px;
+   }
+   .el-menu-vertical-demo a{
+     display: block;
+     width: 100%;
+     height: 100%;
+   }
+   .el-menu-vertical-demo a:hover{
+     color: #4BA2FC;
+   }
+  .router-link-exact-active i{
+    color: #4BA2FC;
+  }
+   .router-link-exact-active{
+     color: #4BA2FC;
    }
 </style>

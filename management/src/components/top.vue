@@ -1,19 +1,21 @@
 <template>
   <div id="top">
-    <div class="logo">会员管理系统</div>
+    <div class="logo">
+      <img src="../assets/logo.png" alt="">
+      会员管理系统
+    </div>
     <ul class="menus">
-      <li v-for="(item, index) in list"><router-link class="run" v-bind:to="item.path" :key="index" replace>{{ item.title }}</router-link</li>
+      <li v-for="(item, index) in list"><router-link class="run" v-bind:to="item.path" :key="index" replace active-class>{{ item.title }}</router-link</li>
       <li class="admin_logo">
         <p>
           <img src="../assets/logo.png" alt="">
         </p>
         <el-dropdown class="user_name">
           <span class="el-dropdown-link">
-            admin<i class="el-icon-caret-bottom"></i>
+            {{this.$store.state.userName}}<i class="el-icon-caret-bottom"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看权限</el-dropdown-item>
-            <el-dropdown-item>退出</el-dropdown-item>
+            <el-dropdown-item @click.native="logout">退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </li>
@@ -30,35 +32,35 @@
             activeIndex: '1',
             list: [
               {
-                path: '/default',
-                title: '系统首页'
+                path:'/default',
+                title: '报表',
               },
               {
                 path: '/set',
-                title: '设置'
+                title: '设置',
               },
-              {
-                path: '/user',
-                title: '账号管理'
-              }
-              ]
+
+            ]
           }
       },
       created:function(){
-        api.Test({
-          query:{
-            postId:101
-          },
-          success: function (res) {
-            console.log(res)
-          }
-        })
+        this.changeRoute(this.$route);
       },
       methods:{
-        handleSelect(){
-
+        changeRoute:function(Route){//改变路由
+          const nowPath = Route.path;
+          this.$store.commit('NAV_SHOW',nowPath);
+        },
+        logout:function(){//登出
+          this.$store.commit('LOGOUT');
         }
+      },
+      watch:{
+          $route(newRoute,oldRoute){//监听路由改变
+            this.changeRoute(newRoute);
+          }
       }
+
     }
 </script>
 
@@ -81,6 +83,10 @@
   }
   .logo{
     margin: 0 20px;
+  }
+  .logo>img{
+    width: 50px;
+    height: 50px;
   }
  .menus{
    list-style-type: none;
@@ -113,7 +119,7 @@
   .el-dropdown-link,.run{
     color: #fff;
   }
-  .run:hover{
+  .run:hover,.router-link-exact-active{
     color: #e2e2e2;
   }
 </style>

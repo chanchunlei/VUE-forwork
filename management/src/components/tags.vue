@@ -21,6 +21,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
     export default {
       data() {
         return {
@@ -34,7 +35,7 @@
         // 关闭单个标签
         closeTags(index) {
           const delItem = this.tagsList.splice(index, 1)[0];
-          console.log(delItem)
+          //console.log(delItem);
           const item = this.tagsList[index] ? this.tagsList[index] : this.tagsList[index - 1];
           if (item) {
             delItem.path === this.$route.path && this.$router.push(item.path);
@@ -58,7 +59,7 @@
         setTags(route){
           const isExist = this.tagsList.some(item => {
             return item.path === route.path;
-        })
+        })//判断路径是否已经存在,返回的是true或者false
           !isExist && this.tagsList.push({
             title: route.meta.title,
             path: route.path
@@ -71,11 +72,21 @@
       computed: {
         showTags() {
           return this.tagsList.length > 0;
-        }
+        },
+        ...mapGetters([
+          'changeName',
+        ])
       },
       watch:{
-        $route(newValue, oldValue){
+        $route(newValue, oldValue){//监听路由改变
           this.setTags(newValue);
+          if(newValue.name=='NoPower'){
+            this.closeOther();
+          }
+          //console.log(newValue);
+        },
+        changeName(val){//判断是否切换NAV
+          this.closeOther();
         }
       },
       created(){

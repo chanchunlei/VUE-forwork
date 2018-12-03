@@ -8,17 +8,38 @@ module.exports = {
   dev: {
 
     // Paths
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
-    proxyTable: {},
+    // assetsSubDirectory: 'static',
+    // assetsPublicPath: '/',
+    // proxyTable: {},
+    //
+    // // Various Dev Server settings
+    // host: '0.0.0.0', // can be overwritten by process.env.HOST
+    // port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    // autoOpenBrowser: false,
+    // errorOverlay: true,
+    // notifyOnErrors: true,
+    // poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
-    // Various Dev Server settings
-    host: '0.0.0.0', // can be overwritten by process.env.HOST
-    port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-    autoOpenBrowser: false,
-    errorOverlay: true,
-    notifyOnErrors: true,
-    poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
+
+      // 开发环境解决跨域
+        env: require('./dev.env'),
+        port: 8080,
+        host: '0.0.0.0',
+        autoOpenBrowser: false,
+        assetsSubDirectory: 'static',
+        assetsPublicPath: '/',
+        proxyTable: {
+          '/gp': {
+            target: 'http://192.168.168.166:5000',
+            changeOrigin: true,
+            pathRewrite: {
+              '^/gp': '/'
+            }
+          }
+        },
+
+
+
 
 
     /**
@@ -42,8 +63,8 @@ module.exports = {
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsSubDirectory: 'static/application',
+    assetsPublicPath: './',//处理白屏
 
     /**
      * Source Maps

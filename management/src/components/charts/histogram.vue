@@ -1,44 +1,64 @@
 <template>
-    <div id="histogram">
-
+    <div :id="datas.id" class="histogram">
     </div>
 </template>
 
 <script>
   import echarts from 'echarts'
-    export default {
+    export default {      //柱状图
         name: "histogram",
+      props:{
+        option:{
+          type: Object,
+          default(){
+            return{}
+          }
+        }
+      },
       data(){
           return{
-
+            datas:{}
           }
       },
-      mounted(){
-         this.drawLine()
+      created(){
+        this.datas = this.option;//获取父元素过来的值
       },
       methods:{
-          drawLine(){
-            let myChart = echarts.init(document.getElementById('histogram'));
+          drawLine(datas){
+            let myChart = echarts.init(document.getElementById(datas.id));
             myChart.setOption({
-              title: { text: '在Vue中使用echarts' },
+              title: { text: datas.title },
               tooltip: {},
+              color: datas.color,
               xAxis: {
-                data: ["周一","周二","周三","周四","周五","周六","周日"]
+                data: datas.names
               },
               yAxis: {},
               series: [{
-                name: '增加数',
+                name: datas.name,
                 type: 'bar',
-                data: [5, 20, 36, 10, 10, 20,33.5]
+                data: datas.value
               }]
             });
+          }
+      },
+      watch:{
+          datas(val){//数据改变开始绘制
+            let name = [],value = [];
+            val.data.forEach(item=>{
+              name.push(item.name);
+              value.push(item.value);
+            })
+            val.names = name;
+            val.value = value;
+            this.drawLine(val);
           }
       }
     }
 </script>
 
 <style scoped>
-    #histogram{
+    .histogram{
       width: 500px;
       height: 400px;
       margin-top: 30px;
