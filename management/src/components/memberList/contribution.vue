@@ -82,7 +82,7 @@
               type : 'value',
               name : '金额',
               axisLabel : {
-                formatter: '{value} 元'
+                formatter: '{value} 万元'
               }
             }
           ],

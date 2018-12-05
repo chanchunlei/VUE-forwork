@@ -26,7 +26,7 @@ body{
   font-size: 14px;
   width: 100%;
   height: 100%;
-  max-width: 1500px;
+  max-width: 1680px;
   font-family: "PingFang SC";
   background: #f2f2f2;
 }

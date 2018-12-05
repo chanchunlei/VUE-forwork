@@ -2,8 +2,8 @@
   <div v-loading="this.$store.state.loading" class="big_box">
     <div class="handle-box">
       <div class="tagBoxSelect">
-        <span class="titleSelected">表头标签：</span>
-        <el-select class="tagSelect" @change="syllable" v-model="value" multiple placeholder="请选择要展示的标签">
+        <span class="titleSelected">展示字段：</span>
+        <el-select class="tagSelect" @change="syllable" v-model="value" multiple placeholder="请选择要展示的字段">
           <el-option
             v-for="item in options"
             :key="item.value"
