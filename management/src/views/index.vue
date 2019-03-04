@@ -5,7 +5,9 @@
      <div class="content-box" :class="{'content-collapse':collapse}">
          <v-Tag></v-Tag>
          <transition name="move" mode="out-in">
-           <router-view></router-view>
+           <keep-alive :include="this.$store.state.cache"> <!--可做监听缓存，缓存tags中的标签，关闭之后就不缓存-->
+             <router-view></router-view>
+           </keep-alive>
          </transition>
      </div>
   </div>
@@ -20,7 +22,7 @@
         name: "index",
         data(){
           return{
-            collapse: false
+            collapse: false,
           }
         },
         components:{

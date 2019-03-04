@@ -36,7 +36,7 @@ new Vue({
   created(){
     //console.log(sessionStorage.getItem("isLogin"));
     if(sessionStorage.getItem("isLogin")){//判断登录状态是否失效
-      store.dispatch('login');
+      store.dispatch('login');//在组件中分发Action
     }
   }
 }).$mount('#app');

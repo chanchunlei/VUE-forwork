@@ -71,7 +71,7 @@
 <style scoped>
   .areaPolygon{
     width: 100%;
-    padding: 0 20px;
+    padding: 0 15px;
     box-sizing: border-box;
     height: 500px;
     margin-top: 30px;

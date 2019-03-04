@@ -31,6 +31,7 @@
   import areaPolygon from '../charts/areaPolygon'
   import api from '../../api/api'
   export default {
+    name: 'membershipSize',
     components:{
       "areaPolygon": areaPolygon
     },

@@ -62,7 +62,8 @@
         })//判断路径是否已经存在,返回的是true或者false
           !isExist && this.tagsList.push({
             title: route.meta.title,
-            path: route.path
+            path: route.path,
+            name: route.name
           })
         },
         handleTags(command){
@@ -87,6 +88,13 @@
         },
         changeName(val){//判断是否切换NAV
           this.closeOther();
+        },
+        tagsList(val){
+          let cache = [];
+          val.forEach(item=>{
+            cache.push(item.name);
+          })
+          this.$store.commit('TAGS_LIST',cache);
         }
       },
       created(){

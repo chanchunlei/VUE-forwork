@@ -7,6 +7,10 @@ axios.interceptors.request.use(//请求前
       config.headers.Authorization = `Bearer ${store.state.token}`;//拼接token
     }
     store.commit('LOADING');//加载动画
+    // const isEXCLE = file.type === ("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" || "application/vnd.ms-excel");
+    // if (!isEXCLE) {
+    //   config.responseType: 'json',
+    // }
     return config;
   },
   error => {
@@ -35,8 +39,8 @@ axios.interceptors.response.use(//请求结束
       case 505:// token认证失败
         store.commit('LOGOUT');
         break;
-      case 506://请求数据格式错误
-        console.log(789);
+      case 530://请求数据格式错误
+        //console.log('请求数据格式错误');
         break;
     }
     //console.log(response);
@@ -60,8 +64,8 @@ axios.interceptors.response.use(//请求结束
         case 505:// token认证失败
               store.commit('LOGOUT');
               break;
-        case 506://请求数据格式错误
-              console.log(789);
+        case 530://请求数据格式错误
+             //console.log('请求数据格式错误');
               break;
       }
     }

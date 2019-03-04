@@ -39,7 +39,7 @@
   import areaPolygon from '../charts/areaPolygon'
   import api from  '../../api/api'
     export default {
-        name: "contribution",
+        name: "memberContribution",
       components:{
         "areaPolygon": areaPolygon
       },

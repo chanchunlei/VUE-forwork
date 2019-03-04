@@ -39,7 +39,7 @@
 <script>
   import api from '../../api/api'
     export default {
-        name: "authority",
+        name: "authorityS",
       data(){
         return{
           list: [],//选择器数据
@@ -60,13 +60,10 @@
         this.classify();
         this.classifyList();
       },
-      watch:{
-          $route(to,from){//监听路由变化
-            if(this.$route.params.id>0){
-              this.rId();
-              console.log(this.$route)
-            }
-          }
+      beforeRouteUpdate (to, from, next) {//导航守卫组件复用
+        next();
+        this.classify();
+        this.classifyList();
       },
       methods:{
         rId(){//获取已有权限

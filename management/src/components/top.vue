@@ -2,7 +2,7 @@
   <div id="top">
     <div class="logo">
       <img src="../assets/logo.png" alt="">
-      会员管理系统
+      百乐卡人群分析系统
     </div>
     <ul class="menus">
       <li v-for="(item, index) in list"><router-link class="run" v-bind:to="item.path" :key="index" replace active-class>{{ item.title }}</router-link</li>
@@ -33,7 +33,7 @@
             list: [
               {
                 path:'/default',
-                title: '报表',
+                title: '导航',
               },
               {
                 path: '/set',

@@ -98,7 +98,7 @@
               if(res.status == 200){
                 this.option4.data=res.data.data;
                 this.option4.name='人数';
-                this.option4.title='购买频次';
+                this.option4.title='当月购买频次';
                 this.option4.id='num';
                 this.option4.color= '#4169E1';
                 this.flag4 = true;

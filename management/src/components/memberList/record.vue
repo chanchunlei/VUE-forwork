@@ -1,81 +1,102 @@
 <template>
-  <div>
-    <!--会员交易信息  (暂时不用)-->
-    <el-table
-      :data="tableData6"
-      :span-method="objectSpanMethod"
-      border
-      style="width: 100%; margin-top: 20px">
-      <el-table-column
-        prop="id"
-        label="会员卡号"
-        width="180">
-      </el-table-column>
-      <el-table-column
-        prop="transaction"
-        label="交易单号">
-      </el-table-column>
-      <el-table-column
-        prop="money"
-        label="交易金额">
-      </el-table-column>
-      <el-table-column
-        prop="kinds"
-        label="交易品类">
-      </el-table-column>
-      <el-table-column
-        prop="shops"
-        label="交易门店">
-      </el-table-column>
-      <el-table-column
-        prop="times"
-        label="交易时间">
-      </el-table-column>
-    </el-table>
+  <div v-loading="this.$store.state.loading">
+    <!--会员信息-->
+    <el-card class="box-card">
+      <div class="itemText">
+        <div>公众号来源：</div>
+        <div>{{tableData.bu_name}}</div>
+      </div>
+      <div class="itemText">
+        <div>性别：</div>
+        <div>{{tableData.sex}}</div>
+      </div>
+      <div class="itemText">
+        <div>商益号：</div>
+        <div>{{tableData.strBncCode}}</div>
+      </div>
+      <div class="itemText">
+        <div>手机号：</div>
+        <div>{{tableData.mobile}}</div>
+      </div>
+      <div class="itemText">
+        <div>会员等级：</div>
+        <div>{{tableData.vip_level}}</div>
+      </div>
+      <div class="itemText">
+        <div>生日：</div>
+        <div>{{tableData.birthday}}</div>
+      </div>
+      <div class="itemText">
+        <div>交易总金额：</div>
+        <div>{{tableData.amount_num}}</div>
+      </div>
+      <div class="itemText">
+        <div>最近一次交易时间：</div>
+        <div>{{tableData.max_or_time}}</div>
+      </div>
+      <div class="itemText">
+        <div>首次交易时间：</div>
+        <div>{{tableData.min_or_time}}</div>
+      </div>
+      <div class="itemText">
+        <div>交易总数：</div>
+        <div>{{tableData.o_num}}</div>
+      </div>
+      <div class="itemText">
+        <div>手机号归属地：</div>
+        <div>{{tableData.province}}</div>
+      </div>
+      <div class="itemText">
+        <div>注册时间：</div>
+        <div>{{tableData.reg_time}}</div>
+      </div>
+    </el-card>
   </div>
 </template>
 
 <script>
+  import api from '../../api/api'
   export default {
+    name: 'recordS',
     data() {
       return {
-        tableData6: [{
-          id: '12987122',
-          transaction: '321895213',
-          money: 198,
-          kinds: '3C数码',
-          shops: '上海百脑汇',
-          times: '2018-05-22'
-        }, {
-          id: '12987122',
-          transaction: '123489651645',
-          money: 165,
-          kinds: '电竞外设',
-          shops: '乐之上海',
-          times: '2018-05-26'
-        }]
+        tableData: {}
       };
     },
-    methods: {
-      objectSpanMethod({ row, column, rowIndex, columnIndex }) {
-        //console.log(row);
-        //console.log(column);
-        //console.log(rowIndex);
-        console.log(columnIndex);
-        if (columnIndex === 0) {
-          if (rowIndex % 2 === 0) {
-            return {
-              rowspan: 2,
-              colspan: 1
-            };
-          } else {
-            return {
-              rowspan: 0,
-              colspan: 0
-            };
+    created(){
+      this.datas();
+    },
+    methods:{
+      datas(){
+        api.MemberDetail({
+          query:{
+            strBncCode: this.$route.params.strBncCode
+          },
+          success: res=>{
+            if(res.status == 200){
+              this.tableData = res.data.data;
+              if(this.tableData.sex == 1){this.tableData.sex = '男'}
+              if(this.tableData.sex == 2){this.tableData.sex = '女'}
+              if(this.tableData.vip_level == 1){this.tableData.vip_level = '一般会员'}
+              if(this.tableData.vip_level == 2){this.tableData.vip_level = 'vip会员'}
+            }
           }
-        }
+        })
       }
+    },
+    beforeRouteUpdate (to, from, next) {//导航守卫组件复用
+      next();
+      this.datas();
     }
   };
 </script>
+<style scoped>
+  .itemText{
+    font-size: 18px;
+    line-height: 50px;
+    display: flex;
+    justify-content: flex-start;
+    color: #666;
+    border-bottom: 1px solid #ccc;
+  }
+</style>

@@ -71,7 +71,7 @@
 <script>
   import api from '../../api/api'
   export default {
-    name:'list',
+    name:'roleList',
     data() {
       return {
         tableData: [],

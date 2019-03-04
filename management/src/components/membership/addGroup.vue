@@ -10,10 +10,10 @@
           <div class="tagLeft">
             <div class="tagLeftBox">
               <h3 class="tagLeftTitle">选择下面标签组成人群</h3>
-              <div class="tagBox">
-                <div class="Tagetitle">会员基本属性标签</div>
+              <div class="tagBox" v-for="childs in datas" v-if="childs.datelist.length>0">
+                <div class="Tagetitle">{{childs.cname}}</div>
                 <ul class="tagListBox">
-                  <li v-for="(item,index) in datas" @click="choose(index)" :class="[item.show ? 'active':'']">{{item.name}}</li>
+                  <li v-for="item in childs.datelist" @click="choose(item)" :class="[item.show ? 'active':'']">{{item.name}}</li>
                 </ul>
               </div>
             </div>
@@ -155,9 +155,11 @@
 <script>
   import api from '../../api/api'
   export default {
+    name: 'groupAdd',
     data() {
       return {
         datas:[],//默认请求数据
+        table:[],//默认请求数据
         list:[],//右侧选中标签
         num: 0,//选中
         checkbox1: [],
@@ -175,19 +177,21 @@
         query:{},
         success:res=>{
           if(res.status==200){
-            for(let i=0;i<res.data.data.length;i++){
-              res.data.data[i].show = false;
-            }
-            this.datas = res.data.data;
-            //console.log(this.datas)
+            this.table = res.data.data;
+            this.datas = JSON.parse(JSON.stringify(this.table));
+            this.datas.forEach(father=>{
+              father.datelist.forEach(child=>{
+                child.show = false;
+              })
+            })
           }
         }
       })
     },
     methods: {
-      choose(idx){//选中标签
-        this.datas[idx].show = true;
-        this.list.unshift(this.datas[idx]);
+      choose(choose){//选中标签
+        choose.show = true;
+        this.list.unshift(choose);
         this.list = Array.from(new Set(this.list));
         this.num = this.list.length;
         //console.log(this.list);
@@ -195,10 +199,12 @@
       clear(it,idx){//清楚选中标签
         this.list.splice(idx,1);
         this.num = this.list.length;
-        this.datas.forEach(item=>{
-          if(item.ltid==it.ltid){
-            item.show = false;
-          }
+        this.datas.forEach(father=>{
+          father.datelist.forEach(item=>{
+            if(item.ltid==it.ltid){
+              item.show = false;
+            }
+          })
         })
       },
       linkage(value,item){
@@ -215,7 +221,6 @@
             })
             if(top){
               let arr = val.slice(i+1,val.length);
-              // val.splice(i,1);
               return this.doing(arr,top[0].children);
             }
           }
@@ -336,7 +341,7 @@
           this.infoMsg(e);
         }
       },
-      produce(crule,cname){
+      produce(crule,cname){//创建请求
         api.ProduceGroup({
           query:{
             crule:crule,
@@ -344,21 +349,22 @@
           },
           success:res=>{
             if(res.data.code == 200){
+              this.datas = JSON.parse(JSON.stringify(this.table));
               this.list = [];
               this.cname = '';
               this.num = 0;
-              this.datas.forEach(item=>{
-                item.show = false;
+              this.datas.forEach(father=>{
+                father.datelist.forEach(child=>{
+                  child.show = false;
+                })
               })
               this.$message({
                 message: res.data.msg,
                 type: 'success'
               });
-            }else{
-              this.$message({
-                message: res.data.msg,
-                type: 'danger'
-              });
+              this.$router.replace({ path: '/default/grouplist'})
+            }else if(res.data.code == 530){
+              this.$message.error(res.data.msg);
             }
           }
 

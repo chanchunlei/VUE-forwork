@@ -24,7 +24,7 @@ export default new Router({//路由模块懒加载
       children:[
         {
           path: '/default',
-          component: resolve => require(['../components/usechart/default.vue'],resolve),
+          component: resolve => require(['../components/alone/default.vue'],resolve),
           meta: {
             title: '系统首页',
             requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
@@ -32,12 +32,31 @@ export default new Router({//路由模块懒加载
           name: 'default',
         },
         {
+          path: '/journaling',
+          component: resolve => require(['../components/alone/journaling.vue'],resolve),
+          meta: {
+            title: '报表',
+            requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
+          },
+          name: 'journaling',
+        },
+        {
+          path: '/ranking',
+          component: resolve => require(['../components/alone/ranking.vue'],resolve),
+          meta: {
+            title: '商品排行',
+            requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
+          },
+          name: 'ranking',
+        },
+        {
           path: '/default/member',
           component: resolve => require(['../components/memberList/member.vue'],resolve),
           meta: {
             title: '会员规模',
             requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
-          }
+          },
+          name: 'membershipSize'
         },
         {
           path: '/default/contribution',
@@ -45,7 +64,8 @@ export default new Router({//路由模块懒加载
           meta: {
             title: '会员贡献',
             requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
-          }
+          },
+          name: 'memberContribution'
         },
         {
           path: '/default/memberList',
@@ -53,15 +73,26 @@ export default new Router({//路由模块懒加载
           meta: {
             title: '会员列表',
             requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
-          }
+          },
+          name: 'memberList'
         },
         {
-          path: '/default/record',
+          path: '/default/transaction/:strBncCode',
+          component: resolve => require(['../components/memberList/transaction.vue'],resolve),
+          meta: {
+            title: '交易信息',
+            requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
+          },
+          name: 'transaction'
+        },
+        {
+          path: '/default/record/:strBncCode',
           component: resolve => require(['../components/memberList/record.vue'],resolve),
           meta: {
-            title: '交易记录',
+            title: '会员详情',
             requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
-          }
+          },
+          name: 'record'
         },
         {
           path: '/default/groupAdd',
@@ -69,7 +100,8 @@ export default new Router({//路由模块懒加载
           meta: {
             title: '人群新增',
             requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
-          }
+          },
+          name: 'groupAdd'
         },
         {
           path: '/default/grouplist',
@@ -77,9 +109,10 @@ export default new Router({//路由模块懒加载
           meta: {
             title: '群列表',
             requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
-          }
+          },
+          name: 'groupList'
         },
-        {  //使用的还是会员列表，但是有参数传输
+        {
           path: '/default/groupmember/:cid',
           component: resolve => require(['../components/membership/groupMember.vue'],resolve),
           meta: {
@@ -88,7 +121,7 @@ export default new Router({//路由模块懒加载
           },
           name: 'groupmember'
         },
-        {  //使用的还是会员列表，但是有参数传输
+        {
           path: '/default/groupdetail/:cid',
           component: resolve => require(['../components/membership/groupDetail.vue'],resolve),
           meta: {
@@ -96,6 +129,42 @@ export default new Router({//路由模块懒加载
             requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
           },
           name: 'groupdetail'
+        },
+        {
+          path: '/default/cardHistory',
+          component: resolve => require(['../components/cardCenter/cardHistory.vue'],resolve),
+          meta: {
+            title: '发券记录',
+            requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
+          },
+          name: 'cardHistory'
+        },
+        {
+          path: '/default/couponDistribution',
+          component: resolve => require(['../components/cardCenter/couponDistribution.vue'],resolve),
+          meta: {
+            title: '优惠券分布',
+            requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
+          },
+          name: 'couponDistribution'
+        },
+        {
+          path: '/default/couponDetail',
+          component: resolve => require(['../components/cardCenter/couponDetail.vue'],resolve),
+          meta: {
+            title: '优惠券详情',
+            requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
+          },
+          name: 'couponDetail'
+        },
+        {
+          path: '/default/cardGroupDetail/:log_id',
+          component: resolve => require(['../components/cardCenter/cardGroupDetail.vue'],resolve),
+          meta: {
+            title: '发券详情',
+            requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
+          },
+          name: 'cardGroupDetail'
         },
         {
           path: '/set',
@@ -131,8 +200,9 @@ export default new Router({//路由模块懒加载
           meta: {
             title: '403',
             requireAuth: true
-          }
+          },
         }
+
       ]
     },
     {

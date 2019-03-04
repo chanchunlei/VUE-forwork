@@ -11,8 +11,9 @@ const state = {
   menu: false, //侧边栏的状态
   name: 'default',//切换nav时的name
   userName:'',//用户名
-  token: '', //登录状态
-  isLogin: false
+  token: '', //登录token
+  isLogin: false, //登录状态
+  cache: []  //缓存页面
 }
 export default new Vuex.Store({
   state,

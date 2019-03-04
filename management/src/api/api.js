@@ -52,9 +52,28 @@ let requsetFile = (params,baseurl,url) =>{
     })
 }
 
+//上传文件
+let uploadFile = (params,baseurl,url) =>{
+  axios({
+    method: 'post',
+    baseURL:baseurl,
+    url: url,
+    responseType: 'blob',
+    data:params.files.formData || {},
+    file:params.files.file,
+    processData:false,
+    contentType:false,
+  })
+    .then(function(res){
+      params.success && params.success(res)
+    })
+    .catch(function(error){
+      params.error && params.error(error)
+    })
+}
 
 
-const Token = params => {
+const Token = params => {//获取token
   requsetToken(params,baseurl,'/token/get_token')
 }
 const File = params => {//下载会员信息文件
@@ -63,6 +82,16 @@ const File = params => {//下载会员信息文件
 const Order = params => {//下载订单文件
   requsetFile(params,baseurl,'/user/get_sale_detail_out')
 }
+const MemberDeal = params => {//下载会员交易信息
+  requsetFile(params,baseurl,'/userdata/user_sale_repeat')
+}
+const Templet = params => {//下载模板文件
+  requsetFile(params,baseurl,'/userdata/out_shangyi')
+}
+const UpFile = params => {//上传商益号
+  uploadFile(params,baseurl,'/userdata/get_code_tel')
+}
+//设置
 const AdminList = params => {//管理员列表
   request(params,baseurl,'/admin/admin_list')
 }
@@ -93,6 +122,7 @@ const RoleAuth = params =>{//获取某个角色已有权限
 const SetRole = params =>{//设置角色权限
   request(params,baseurl,'/admin/set_role_auth')
 }
+//导航
 const Sexual = params =>{//首页性别分布图
   request(params,baseurl,'/user/get_user_sex')
 }
@@ -114,8 +144,17 @@ const GroupList = params =>{//群列表
 const GroupMemberList = params =>{//获取某个人群会员列表
   request(params,baseurl,'/lab/get_crowd_user_list')
 }
+const GroupMemberFile = params => {//下载某个人群会员列表手机号
+  requsetFile(params,baseurl,`/crowd/out_crowd_phone/${params.query.cid}`)
+}
 const MemberList = params =>{//会员列表
   request(params,baseurl,'/user/get_user_list')
+}
+const MemberOrderDetail = params =>{//会员交易详情
+  request(params,baseurl,'/user/get_one_sale_detail')
+}
+const MemberDetail = params =>{//某个会员详细信息
+  request(params,baseurl,'/user/get_one_user')
 }
 const MemberData = params =>{//会员规模
   request(params,baseurl,'/userdata/get_user_data')
@@ -135,10 +174,46 @@ const AnnualTransaction = params =>{//年成交占比
 const Gmv = params =>{//每月成交金额
   request(params,baseurl,'/analysis/getordermoney')
 }
+const Store = params =>{//有商品排行的门店信息
+  request(params,baseurl,'/ranking/store')
+}
+const GoodsList = params =>{//有商品排行的门店信息
+  request(params,baseurl,'/ranking/ranking_list')
+}
+const CouponList = params =>{//获取券列表
+  request(params,baseurl,'/card/get_card_list')
+}
+const MsgPower = params =>{//发券短信通知权限
+  request(params,baseurl,'/card/send_card_dxmsg')
+}
+const CouponSend = params =>{//发券
+  request(params,baseurl,'/card/send_card')
+}
+const SingleCouponSend = params =>{//单个人发券
+  request(params,baseurl,'/card/send_one_card')
+}
+const CardHistory = params => {//发券记录
+  request(params,baseurl,'/card/send_card_log')
+}
+const CardHistoryDetail = params => {//发券记录详情
+  request(params,baseurl,'/card/send_card_log_detail')
+}
+const CouponDistribution = params => {//优惠券分布
+  request(params,baseurl,'/carddata/tc')
+}
+const BusinessGroup = params => {//事业群列表
+  request(params,baseurl,'/carddata/teg_list')
+}
+const CouponDetailList = params => {//卡券数据列表
+  request(params,baseurl,'/carddata/list')
+}
 export default{
   Token,
   File,
   Order,
+  MemberDeal,
+  Templet,
+  UpFile,
   AdminList,
   AdminRole,
   RoleList,
@@ -156,11 +231,25 @@ export default{
   DeleteGroup,
   GroupList,
   GroupMemberList,
+  GroupMemberFile,
   checkTime,
   PurchaseFrequency,
   AnnualTransaction,
   Gmv,
   MemberList,
+  MemberOrderDetail,
+  MemberDetail,
   MemberData,
-  MemberOffer
+  MemberOffer,
+  Store,
+  GoodsList,
+  CouponList,
+  MsgPower,
+  CouponSend,
+  SingleCouponSend,
+  CardHistory,
+  CardHistoryDetail,
+  CouponDistribution,
+  BusinessGroup,
+  CouponDetailList
 }

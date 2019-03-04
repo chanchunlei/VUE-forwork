@@ -4,7 +4,7 @@
     <canvas id="mycanvas"></canvas>
     <el-card class="box-card animated bounceIn">
       <el-form :model="ruleForm" :label-position="labelPosition" status-icon :rules="rules" ref="ruleForm" label-width="50px" class="demo-ruleForm">
-        <h3 class="login_title">系统登录</h3>
+        <h3 class="login_title">百乐卡人群分析系统</h3>
         <el-form-item label="账号" prop="account">
           <el-input type="text" v-model="ruleForm.account" @keyup.native.enter="handleSubmit" auto-complete="off" placeholder="账号"></el-input>
         </el-form-item>
@@ -197,16 +197,16 @@
      margin: 15px 0;
    }
    .box-card{
-    width: 400px;
-    background-color: rgba(255,255,255,.9);
-    border: 0;
-     box-shadow: 0px 2px 20px 15px #e2e2e2;
-    position: absolute;
-    top: 25%;
-    left: 50%;
-    margin-left: -200px;
-    padding-right: 20px;
-    box-sizing: border-box;
+     width: 400px;
+     background-color: rgba(255,255,255,.9);
+     border: 0;
+     box-shadow: 0px 2px 20px 15px #e2e2e2 !important;
+     position: absolute;
+     top: 25%;
+     left: 50%;
+     margin-left: -200px;
+     padding-right: 20px;
+     box-sizing: border-box;
      z-index: 200;
   }
   .login_btn{

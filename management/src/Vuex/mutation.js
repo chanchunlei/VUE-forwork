@@ -6,6 +6,7 @@ const LOGIN = 'LOGIN';
 const MENU = 'MENU';
 const LOADING = 'LOADING'
 const LOADING_DONE = 'LOADING_DONE';
+const TAGS_LIST = 'TAGS_LIST';
 export default{
   [NAV_SHOW](state,pathName){//导航显示部分
     state.pathName = pathName;
@@ -34,5 +35,8 @@ export default{
   },
   [LOADING_DONE](state){//加载结束
     state.loading = false;
+  },
+  [TAGS_LIST](state,newcache){//tags缓存
+    state.cache = newcache;
   }
 }

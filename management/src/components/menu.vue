@@ -28,7 +28,7 @@
            <el-menu-item index="2-3"><router-link to="/default/memberList" active-class>会员列表</router-link></el-menu-item>
          </el-menu-item-group>
        </el-submenu>
-       <!--2-->
+       <!--3-->
        <el-submenu index="3">
          <template slot="title">
            <i class="iconfont icon-xingweifenxi"></i>
@@ -39,6 +39,32 @@
            <el-menu-item index="3-2"><router-link to="/default/groupAdd" active-class>人群新增</router-link></el-menu-item>
          </el-menu-item-group>
        </el-submenu>
+       <!--4-->
+       <el-submenu index="4">
+         <template slot="title">
+           <i class="iconfont el-icon-tickets"></i>
+           <span slot="title">卡券中心</span>
+         </template>
+         <el-menu-item-group>
+           <el-menu-item index="4-1"><router-link to="/default/cardHistory" active-class>发券记录</router-link></el-menu-item>
+           <el-menu-item index="4-2"><router-link to="/default/couponDistribution" active-class>优惠券分布</router-link></el-menu-item>
+           <el-menu-item index="4-3"><router-link to="/default/couponDetail" active-class>优惠券详情</router-link></el-menu-item>
+         </el-menu-item-group>
+       </el-submenu>
+       <!--5-->
+       <el-menu-item index="5">
+         <router-link to="/ranking" active-class>
+           <i class="el-icon-sort"></i>
+           <span>商品排行</span>
+         </router-link>
+       </el-menu-item>
+       <!--6-->
+       <el-menu-item index="6">
+         <router-link to="/journaling" active-class>
+           <i class="el-icon-document"></i>
+           <span>报表</span>
+         </router-link>
+       </el-menu-item>
      </el-menu>
      <!--设置导航-->
      <el-menu class="el-menu-vertical-demo" :collapse="this.$store.state.menu" v-if="showName=='set'? true:false">
