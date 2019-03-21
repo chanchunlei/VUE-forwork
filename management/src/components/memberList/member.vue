@@ -69,6 +69,7 @@
         api.MemberData({
           query:{},
           success:res=>{
+            console.log(res);
             if(res.status==200){
               this.total = res.data.data.total;
               this.yesterday = res.data.data.yesterday;

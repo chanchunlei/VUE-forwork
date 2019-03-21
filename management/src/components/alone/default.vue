@@ -6,6 +6,9 @@
      <Histogram :option="option4" v-if="flag4"></Histogram>
      <Dashboard :option="option5" v-if="flag5"></Dashboard>
      <Blend :option="option6" v-if="flag6"></Blend>
+     <Pie :option="option7" v-if="flag7"></Pie>
+     <Blend :option="option8" v-if="flag8"></Blend>
+     <areaPPieolygon :option="trend" v-if="flag9"></areaPPieolygon>
    </div>
 </template>
 
@@ -13,13 +16,17 @@
   import Dashboard from '../charts/dashboard'
   import Histogram from '../charts/histogram'
   import Blend from '../charts/blend'
+  import areaPolygon from '../charts/areaPolygon'
+  import Pie from '../charts/pie'
   import api from '../../api/api'
     export default {
         name: "default",
       components:{
         "Dashboard": Dashboard,
         "Histogram": Histogram,
-        "Blend": Blend
+        "Blend": Blend,
+        "areaPolygon": areaPolygon,
+        "Pie": Pie
       },
       data(){
           return{
@@ -29,12 +36,20 @@
             option4:{},
             option5:{},
             option6:{},
+            option7:{},
+            option8:{},
             flag1: false,//解决组件传值异步
             flag2: false,//解决组件传值异步
             flag3: false,//解决组件传值异步
             flag4: false,//解决组件传值异步
             flag5: false,//解决组件传值异步
-            flag6: false//解决组件传值异步
+            flag6: false,//解决组件传值异步
+            flag7: false,//解决组件传值异步
+            flag8: false,//解决组件传值异步
+            /*****分割线*****/
+            trend:{},
+            flag9: false,//解决组件传值异
+
         }
       },
       created(){
@@ -44,6 +59,8 @@
         this.num();
         this.deal();
         this.blend();
+        this.getusersource();
+        this.getnewintwo();
       },
       methods:{
         sexual(){//性别比例数据
@@ -137,7 +154,30 @@
               }
             }
           })
-        }
+        },
+        getusersource() {//会员卡注册来源
+          api.GetUserSource({
+            query:{},
+            success:res=>{
+              if(res.status == 200){
+                this.option7.data=res.data.data;
+                this.option7.name='百乐卡会员注册来源';
+                this.option7.title='百乐卡会员注册来源';
+                this.option7.id='getusersource';
+                this.option7.color= ['#40E0D0','#FFB6C1','#66CDAA','#f5b031','#59ccf7','#fad797','#c3b4df','#ADFF2F','#D2B48C','#B3B3B3','#9B30FF'];
+                this.flag7 = true;
+              }
+            }
+          })
+        },
+        getnewintwo() { //新办百乐卡会员趋势
+          api.Getnewintwo({
+            query:{},
+            success:res=> {
+              console.log(res);
+            }
+          })
+        },
       }
     }
 </script>

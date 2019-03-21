@@ -7,7 +7,7 @@
 <script>
   import echarts from 'echarts'
   export default {
-    name: "pie",//环形图
+    name: "pie",
     props:{
       option:{
         type:Object,
@@ -38,8 +38,8 @@
             formatter: "{a} <br/>{b} : {c} ({d}%)"
           },
           legend: {
-            orient : 'vertical',
-            x : 'left',
+            orient : 'none',
+            x : '-200px',
           },
           toolbox: {
             show : true,
@@ -104,10 +104,8 @@
 
 <style scoped>
   .pie{
-    width: 100%;
-    padding: 0 15px;
-    box-sizing: border-box;
-    height: 500px;
+    width: 500px;
+    height: 400px;
     margin-top: 30px;
   }
 </style>

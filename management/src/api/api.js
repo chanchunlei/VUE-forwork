@@ -207,6 +207,12 @@ const BusinessGroup = params => {//事业群列表
 const CouponDetailList = params => {//卡券数据列表
   request(params,baseurl,'/carddata/list')
 }
+const GetUserSource = params => {//注册来源
+  request(params,baseurl,'/analysis/getusersource')
+}
+const Getnewintwo = params => {//新会员月份趋势
+  request(params,baseurl,'/analysis/getnewintwo')
+}
 export default{
   Token,
   File,
@@ -251,5 +257,7 @@ export default{
   CardHistoryDetail,
   CouponDistribution,
   BusinessGroup,
-  CouponDetailList
+  CouponDetailList,
+  GetUserSource,
+  Getnewintwo
 }
